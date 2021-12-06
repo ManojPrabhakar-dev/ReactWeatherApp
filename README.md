@@ -1,2 +1,3 @@
-# QuizApp
-Quiz App created using React, Redux, Material UI
+# Weather App
+
+Weather App created using React, Material UI, OpenWeatherMap REST API
