@@ -12,9 +12,9 @@
 //   return prefix + icon;
 // }
 
-export function getCurrentIconURL(forecastData) {
-  if (forecastData.current) {
-    return `https://openweathermap.org/img/wn/${forecastData.current.weather[0].icon}@2x.png`;
+export function getCurrentIconURL(weatherData) {
+  if (weatherData) {
+    return `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`;
   } else {
     return "";
   }
