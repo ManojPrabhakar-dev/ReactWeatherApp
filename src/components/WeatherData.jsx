@@ -62,17 +62,19 @@ const WeatherData = ({ weatherData }) => {
     <>
       <Box
         sx={{
-          backgroundColor: "yellow",
+          // backgroundColor: "yellow",
           // display: "grid",
           // gridTemplateRows: "1fr 300px",
+          height: "100%",
           display: "flex",
           flexDirection: "column",
+          // alignItems: "stretch",
         }}
       >
         <Box
           sx={{
             display: "flex",
-            flex: 1,
+            // flex: 1,
             justifyContent: "space-between",
             mx: 2,
           }}
@@ -82,16 +84,100 @@ const WeatherData = ({ weatherData }) => {
           </Box>
           <Box sx={{ typography: "body1", fontSize: 20 }}>{getDateTime()}</Box>
         </Box>
-        <Box>
-          <Box sx={{ fontSize: "8rem", textAlign: "center" }}>
-            {weatherData.main.temp} &deg;C
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            // display: "relative",
+            flex: 2,
+            backgroundColor: "#4ee58d",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              flex: 2,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "#AFe58d",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flex: 2,
+                mx: "auto",
+              }}
+            >
+              <Box
+                sx={{
+                  position: "relative",
+                  width: "350px",
+                  height: "180px",
+                  backgroundColor: "#CA2A0d",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: "7rem",
+                    textAlign: "center",
+                  }}
+                >
+                  {weatherData.main.temp}
+                </Box>
+                <Box
+                  sx={{
+                    position: "absolute",
+                    fontSize: "2rem",
+                    top: "0.5rem",
+                    right: 0,
+                  }}
+                >
+                  &deg;C
+                </Box>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                AlignItems: "center",
+              }}
+            >
+              <img
+                style={{
+                  width: 70,
+                  height: 70,
+                }}
+                src={getCurrentIconURL(weatherData)}
+                alt="Weather Icon"
+              />
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  typography: "h5",
+                  fontSize: "2rem",
+                  mx: 1,
+                }}
+              >
+                {weatherData.weather[0].main}
+              </Box>
+            </Box>
           </Box>
-          <img
-            style={{ width: 70, height: 70 }}
-            src={getCurrentIconURL(weatherData)}
-            alt="Weather Icon"
-          />
-          <p>{weatherData.weather[0].main}</p>
+          <Box
+            sx={{ display: "flex", flex: 1, justifyContent: "space-around" }}
+          >
+            <Box>Wind Speed</Box>
+            <Box>Pressure</Box>
+            <Box>Humidity</Box>
+          </Box>
         </Box>
       </Box>
     </>

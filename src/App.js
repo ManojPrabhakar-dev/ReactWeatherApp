@@ -8,6 +8,7 @@ import axios from "axios";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import WeatherData from "./components/WeatherData";
 import ForecastData from "./components/Forecast";
+import ResponsiveLayout from "./Layouts/ResponsiveLayout";
 
 function App() {
   const [lat, setLat] = useState(0);
@@ -57,52 +58,54 @@ function App() {
       {loading ? (
         <h1>Loading...</h1>
       ) : (
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateRows: "2fr 12fr 1fr",
-            height: "100vh",
-            bgcolor: "#e5dede",
-          }}
-        >
-          <Header />
-          <Box sx={{ backgroundColor: "green" }}>
-            <Box
-              sx={{ backgroundColor: "blue", width: "80%", mx: "auto", my: 2 }}
-            >
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                {/* sx={{ display: "grid", gridTemplateRows: "1fr auto" }}> */}
-                <Box sx={{ flex: 3 }}>
+        <Box sx={{ height: "100vh" }}>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateRows: "repeat(12,1fr)",
+              height: "100%",
+              bgcolor: "#e5dede",
+            }}
+          >
+            <Box sx={{ gridRow: "span 1" }}>
+              Header
+              {/* <Header /> */}
+            </Box>
+            <Box sx={{ gridRow: "span 10", backgroundColor: "green" }}>
+              {/* Body */}
+              <Box
+                sx={{
+                  backgroundColor: "blue",
+                  width: "80%",
+                  height: "100%",
+                  mx: "auto",
+                  display: "flex",
+                  flexDirection: "column",
+                  // my: 2,
+                }}
+              >
+                {/* <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                > */}
+                <Box sx={{ flex: 10, backgroundColor: "red" }}>
+                  {/* Weather */}
                   <WeatherData weatherData={weatherData} />
                 </Box>
-                {/* <ForecastData forecastData={forecastData} /> */}
-                {/* <Box>
-                <h1>weatherData.main.temp &deg;C</h1>
-                <img
-                  style={{ width: 70, height: 70 }}
-                  src=""
-                  alt="Weather Icon"
-                />
-                <p>forecastData.current.weather[0].main</p>
-              </Box> */}
-
-                <ForecastData forecastData={forecastData} />
+                <Box sx={{ flex: 3, backgroundColor: "yellow" }}>
+                  {/* Forecast */}
+                  <ForecastData forecastData={forecastData} />
+                </Box>
               </Box>
+              {/* </Box> */}
+            </Box>
+            <Box gridRow="span 1">
+              Footer
+              {/* <Footer /> */}
             </Box>
           </Box>
-
-          {/* <Box sx={{ backgroundColor: "green" }}>
-          <WeatherData />
-        </Box> */}
-          {/* <Router>
-          <div>
-            <Routes>
-              <Route path="/" exact element={<WeatherData />} />
-              <Route path="/quiz" element={<Forecast />} />
-            </Routes>
-          </div>
-        </Router> */}
-          <Footer />
         </Box>
       )}
     </>
@@ -110,3 +113,40 @@ function App() {
 }
 
 export default App;
+
+{
+  /* <Box
+          sx={{
+            display: "grid",
+            gridTemplateRows: "repeat(12,1fr)",
+            height: "100vh",
+            bgcolor: "#e5dede",
+            // height: 1,
+          }}
+        >
+          <Box gridRow="span 2">
+            <Header />
+          </Box>
+          <Box gridRow="span 8" sx={{ backgroundColor: "green" }}>
+            <Box
+              sx={{ backgroundColor: "blue", width: "80%", mx: "auto", my: 2 }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >                
+                <Box>
+                  <WeatherData weatherData={weatherData} />
+                </Box>               
+
+                <ForecastData forecastData={forecastData} />
+              </Box>
+            </Box>
+          </Box>
+          <Box gridRow="span 2">
+            <Footer />
+          </Box>
+        </Box> */
+}
