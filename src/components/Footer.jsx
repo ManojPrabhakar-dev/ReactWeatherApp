@@ -1,11 +1,8 @@
 import React from "react";
+import { Box } from "@mui/material";
 
 const Footer = () => {
-  return (
-    <div className="footer">
-      <p className="footerText">Copyright 2019, Mprabhak</p>
-    </div>
-  );
+  return <Box>Copyright 2019, Mprabhak</Box>;
 };
 
 export default Footer;

@@ -10,12 +10,37 @@ import WeatherData from "./components/WeatherData";
 import ForecastData from "./components/Forecast";
 import ResponsiveLayout from "./Layouts/ResponsiveLayout";
 
+const initialWeatherState = {
+  city: "",
+  dateTime: "",
+  temp: "",
+  high: "",
+  low: "",
+  humidity: "",
+  pressure: "",
+  windSpeed: "",
+  icon: "",
+  weather: "",
+};
+
+const initialForecastData = {
+  daily: [
+    {
+      dateTime: "",
+      high: "",
+      low: "",
+      icon: "",
+      weather: "",
+    },
+  ],
+};
+
 function App() {
   const [lat, setLat] = useState(0);
   const [long, setLong] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [weatherData, setWeatherData] = useState({});
-  const [forecastData, setForecastData] = useState({});
+  const [weatherData, setWeatherData] = useState(initialWeatherState);
+  const [forecastData, setForecastData] = useState(initialForecastData);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(function (position) {
@@ -30,28 +55,69 @@ function App() {
       console.log(url);
       const { data } = await axios.get(url);
       console.log(data);
-      setWeatherData(data);
       console.log(data.main.temp);
       //----------------------------------------------
       let url_forecast = `${process.env.REACT_APP_URL}/onecall?lat=${lat}&lon=${long}&units=metric&cnt=5&exclude=hourly,minutely&appid=${process.env.REACT_APP_API_KEY}`;
       console.log(url_forecast);
       const forecastResp = await axios.get(url_forecast);
       console.log(forecastResp.data);
-      setForecastData(forecastResp.data);
-      setLoading(false);
+      let forecast = forecastResp.data;
+      let currentWeather = forecast.current;
+      let daily = forecast.daily;
+      // let weatherInfo = forecast.daily[0].weather[0];
+      let forecastDataList = [];
+      for (let day of daily.slice(1, 6)) {
+        let data = {
+          dateTime: day.dt,
+          high: day.temp.max,
+          low: day.temp.min,
+          windSpeed: day.wind_speed,
+          pressure: day.pressure,
+          humidity: day.humidity,
+          icon: day.weather[0].icon,
+          weather: day.weather[0].main,
+          temp: day.temp.day,
+        };
+        forecastDataList.push(data);
+      }
+      setForecastData(forecastDataList);
 
-      // return data;
+      setWeatherData({
+        city: data.name,
+        dateTime: currentWeather.dt,
+        temp: currentWeather.temp,
+        high: daily[0].temp.max,
+        low: daily[0].temp.min,
+        windSpeed: currentWeather.wind_speed,
+        pressure: currentWeather.pressure,
+        humidity: currentWeather.humidity,
+        icon: currentWeather.weather[0].icon,
+        weather: currentWeather.weather[0].main,
+      });
+
+      setLoading(false);
     };
 
     if (lat !== 0 && long !== 0) {
       fetchData();
-      // .then((data) => {
-      //   setWeatherData(data);
-      //   setLoading(false);
-      //   console.log(data.main.temp);
-      // });
     }
   }, [lat, long]);
+
+  function handleForecastClick(selectedData) {
+    console.log(`onForecast Click : ${selectedData}`);
+    setWeatherData({
+      ...weatherData,
+      dateTime: selectedData.dt,
+      temp: selectedData.temp,
+      high: selectedData.high,
+      low: selectedData.low,
+      windSpeed: selectedData.windSpeed,
+      pressure: selectedData.pressure,
+      humidity: selectedData.humidity,
+      icon: selectedData.icon,
+      weather: selectedData.weather,
+    });
+  }
 
   return (
     <>
@@ -68,8 +134,7 @@ function App() {
             }}
           >
             <Box sx={{ gridRow: "span 1" }}>
-              Header
-              {/* <Header /> */}
+              <Header />
             </Box>
             <Box sx={{ gridRow: "span 10", backgroundColor: "green" }}>
               {/* Body */}
@@ -84,26 +149,27 @@ function App() {
                   // my: 2,
                 }}
               >
-                {/* <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                > */}
                 <Box sx={{ flex: 10, backgroundColor: "red" }}>
-                  {/* Weather */}
                   <WeatherData weatherData={weatherData} />
                 </Box>
                 <Box sx={{ flex: 3, backgroundColor: "yellow" }}>
-                  {/* Forecast */}
-                  <ForecastData forecastData={forecastData} />
+                  <ForecastData
+                    forecastData={forecastData}
+                    updateWeatherInfo={handleForecastClick}
+                  />
                 </Box>
               </Box>
-              {/* </Box> */}
             </Box>
-            <Box gridRow="span 1">
-              Footer
-              {/* <Footer /> */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end",
+                gridRow: "span 1",
+                mb: 1,
+              }}
+            >
+              <Footer />
             </Box>
           </Box>
         </Box>
@@ -113,40 +179,3 @@ function App() {
 }
 
 export default App;
-
-{
-  /* <Box
-          sx={{
-            display: "grid",
-            gridTemplateRows: "repeat(12,1fr)",
-            height: "100vh",
-            bgcolor: "#e5dede",
-            // height: 1,
-          }}
-        >
-          <Box gridRow="span 2">
-            <Header />
-          </Box>
-          <Box gridRow="span 8" sx={{ backgroundColor: "green" }}>
-            <Box
-              sx={{ backgroundColor: "blue", width: "80%", mx: "auto", my: 2 }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >                
-                <Box>
-                  <WeatherData weatherData={weatherData} />
-                </Box>               
-
-                <ForecastData forecastData={forecastData} />
-              </Box>
-            </Box>
-          </Box>
-          <Box gridRow="span 2">
-            <Footer />
-          </Box>
-        </Box> */
-}

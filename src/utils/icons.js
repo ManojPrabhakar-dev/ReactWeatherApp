@@ -14,7 +14,7 @@
 
 export function getCurrentIconURL(weatherData) {
   if (weatherData) {
-    return `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`;
+    return `https://openweathermap.org/img/wn/${weatherData.icon}@2x.png`;
   } else {
     return "";
   }
