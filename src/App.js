@@ -41,6 +41,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [weatherData, setWeatherData] = useState(initialWeatherState);
   const [forecastData, setForecastData] = useState(initialForecastData);
+  const [forecastCurrent, setForecastCurrent] = useState({});
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(function (position) {
@@ -64,6 +65,11 @@ function App() {
       let forecast = forecastResp.data;
       let currentWeather = forecast.current;
       let daily = forecast.daily;
+      setForecastCurrent({
+        city: data.name,
+        current: currentWeather,
+        daily: daily[0],
+      });
       // let weatherInfo = forecast.daily[0].weather[0];
       let forecastDataList = [];
       for (let day of daily.slice(1, 6)) {
@@ -107,7 +113,7 @@ function App() {
     console.log(`onForecast Click : ${selectedData}`);
     setWeatherData({
       ...weatherData,
-      dateTime: selectedData.dt,
+      dateTime: selectedData.dateTime,
       temp: selectedData.temp,
       high: selectedData.high,
       low: selectedData.low,
@@ -116,6 +122,21 @@ function App() {
       humidity: selectedData.humidity,
       icon: selectedData.icon,
       weather: selectedData.weather,
+    });
+  }
+
+  function handleCurrentWeather() {
+    setWeatherData({
+      city: forecastCurrent.city,
+      dateTime: forecastCurrent.current.dt,
+      temp: forecastCurrent.current.temp,
+      high: forecastCurrent.daily.temp.max,
+      low: forecastCurrent.daily.temp.min,
+      windSpeed: forecastCurrent.current.wind_speed,
+      pressure: forecastCurrent.current.pressure,
+      humidity: forecastCurrent.current.humidity,
+      icon: forecastCurrent.current.weather[0].icon,
+      weather: forecastCurrent.current.weather[0].main,
     });
   }
 
@@ -156,6 +177,7 @@ function App() {
                   <ForecastData
                     forecastData={forecastData}
                     updateWeatherInfo={handleForecastClick}
+                    updateTodayInfo={handleCurrentWeather}
                   />
                 </Box>
               </Box>
